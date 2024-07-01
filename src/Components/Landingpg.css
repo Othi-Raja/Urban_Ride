@@ -1,0 +1,37 @@
+ .landing-pg{
+    background-color: black;
+    width: 100%;
+    height: 100vh;
+ }
+.background-image {
+    background-image: url('../images/Group_182.png');  
+    background-size: cover;
+    background-position: center;
+    height: 100vh; /* Adjust the height as needed */
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: white;
+    z-index: 999; */
+    margin: 0;
+  }
+  .text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .LP-text1  {
+    font-size:54px;
+    margin: 0;
+    padding: 0;
+    color: white;
+  }
+  .LP-text2  {
+    font-size: 54px;
+    color: white;
+    margin: 0;
+    padding: 0;
+  }

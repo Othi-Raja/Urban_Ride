@@ -1,13 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import LandingPG from './Components/Landingpage';
+import './Components/Landingpg.css'
+import './Components/App.css'
+import About from './Components/About';
+import GeXApp from './Components/GeXApp';
+import ContactForm from './Components/ContactForm';
+import Footer from './Components/Footer';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    {/* <Navbar /> */}
+    <LandingPG/>
+    <About/>
+    <GeXApp/>
+    <ContactForm/>
+    <Footer/>
   </React.StrictMode>
 );
 
