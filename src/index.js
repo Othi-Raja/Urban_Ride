@@ -9,11 +9,14 @@ import About from './Components/About';
 import GeXApp from './Components/GeXApp';
 import ContactForm from './Components/ContactForm';
 import Footer from './Components/Footer';
+import 'aos/dist/aos.css';
+import { ToastContainer } from 'react-toastify';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+      <ToastContainer />
     {/* <Navbar /> */}
     <LandingPG/>
     <About/>

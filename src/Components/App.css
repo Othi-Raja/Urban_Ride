@@ -11,6 +11,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0; 
+  overflow-x: hidden;
 }
 ::-webkit-scrollbar{
   display: none;
@@ -25,8 +26,34 @@ body {
 .Nav-bg {
   background-image: radial-gradient(center, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1));
 }
+.nav-hover{
+  color: white;
+}
+.nav-hover:hover{
+color: grey;
+}
+.bg-glass{ 
+background: rgba(255, 255, 255, 0);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(9px);
+-webkit-backdrop-filter: blur(9px);
+}
+/* Custom CSS for the Navbar.Toggle button */
+.toggle-btn {
+  border: none; /* Remove the border */
+  outline: none; /* Remove the outline */
+}
+
+.toggle-btn:focus {
+  border: none; /* Remove the border on focus */
+  outline: none; /* Remove the outline on focus */
+  box-shadow: none; /* Remove the box shadow (if any) */
+}
+
 .about-Pg {
   background-color: var(--grey);
+  
   color: var(--about-bg);
   border-top-right-radius: 80px;
   border-top-left-radius: 80px;
@@ -65,14 +92,17 @@ body {
 .GeXApp{
   background-color: var(--grey);
   color: var(--white-font);
-  padding-top: 50px;
+  padding-top: 40px;
+  padding-bottom: 100px;
 }
 .App-Logo{
   border-radius: 100%;
- 
   text-align: center;
   max-width: 100%;
   height: auto;
+}
+.txt-justify{
+  text-align: justify;
 }
 .logo{
   width: 100%;
@@ -95,4 +125,12 @@ body {
  hr{
   height: 5px;
   background-color: white;
+ }
+ 
+ @media (max-width: 576px) {
+.about-Pg {
+  
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+}
  }

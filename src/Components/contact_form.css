@@ -1,6 +1,38 @@
-*{
-    color: white;
-}
+ 
 .contact-form{
     background-color: #292929;
+    color: white;
+}
+::placeholder{
+font-weight: 700;
+color: black;
+}
+ 
+@media (min-width: 576px) {
+    .form{
+        margin: 0 2rem; /* Small devices */
+      }
+    
+}
+
+  @media (min-width: 768px) 
+{
+    .form{
+        margin: 0 3rem; /* Medium devices */
+      }
+}
+
+  @media (min-width: 992px) 
+{
+    .form{
+        margin: 0 4rem; /* Large devices */
+      }
+}
+
+  @media (min-width: 1200px)
+
+{
+    .form {
+        margin: 0 8rem; /* Extra large devices */
+      }
 }

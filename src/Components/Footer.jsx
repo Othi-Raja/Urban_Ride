@@ -1,18 +1,25 @@
-import React from 'react'
+import {React,useEffect} from 'react'
 import { Container, Row, Col } from 'react-bootstrap';
 import '../Components/App.css'
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 export default function Footer() {
+    useEffect(() => {
+        AOS.init({
+          duration: 1000, // Animation duration
+        });
+      }, []);
     const date = new Date().getFullYear();
 
     return (
         <div className='Footer'>
-            <Container className='text-center'>
+            <Container className='text-center pb-4'>
                 <div className='p-4'>
-                    <h2>Join Me on This Ride</h2>
-                    <p>Thank you for your support! Stay connected, informed, and enjoy the ride. </p>
-                    <p>Follow me on social media, subscribe to updates, and download Go Extra Mile to start <br />
+                    <h2 data-aos='fade-in'>Join Me on This Ride</h2>
+                    <p data-aos='fade-in'>Thank you for your support! Stay connected, informed, and enjoy the ride. </p>
+                    <p data-aos='fade-in'>Follow me on social media, subscribe to updates, and download Go Extra Mile to start <br />
                         earning rewards today. </p>
-                    <p>Let’s ride the future together!</p>
+                    <p data-aos='fade-in'>Let’s ride the future together!</p>
                 </div>
                 <hr />
                 <Row className='justify-content-center text-center'>

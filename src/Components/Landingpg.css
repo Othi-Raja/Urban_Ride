@@ -4,7 +4,7 @@
     height: 100vh;
  }
 .background-image {
-    background-image: url('../images/Group_182.png');  
+    background-image: url('../images/Groupulfinal.png');  
     background-size: cover;
     background-position: center;
     height: 100vh; /* Adjust the height as needed */
@@ -18,7 +18,7 @@
   }
   .text-overlay {
     position: absolute;
-    top: 50%;
+    top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
@@ -35,3 +35,13 @@
     margin: 0;
     padding: 0;
   }
+  @media (max-width: 576px) {
+   .LP-text1{
+    font-size: 25px;
+    padding-top: 20px;
+   }
+   .LP-text2{
+    font-size: 25px;
+   }
+    
+}
