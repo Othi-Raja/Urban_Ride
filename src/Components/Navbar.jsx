@@ -20,7 +20,7 @@ function NavBar() {
     <div> 
     <Navbar className='Nav-bg fixed-top bg-glass' variant="dark" expand="lg"  expanded={expanded} onToggle={() => setExpanded(!expanded)}>
       <Container>
-        <Navbar.Brand data-aos='fade-in' href="#home" style={{ color: '#FF0000', fontFamily: 'Brush Script MT', fontWeight: 'bold',fontSize:'50px' }}>
+        <Navbar.Brand data-aos='fade-in' href="#home" className='urban-logo' style={{ color: '#FF0000',fontSize:'40px' }}>
           UrbanRider
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" className='toggle-btn'/>
