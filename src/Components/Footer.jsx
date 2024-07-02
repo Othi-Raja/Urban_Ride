@@ -23,7 +23,7 @@ export default function Footer() {
                 <hr />
                 <Row className='justify-content-center text-center'>
                     <Col xs={12} md={4} className="mb-3 mb-md-0">
-                        <small><b>{date} &copy;UrbanRider</b></small>
+                        <small><b>{date} &copy; UrbanRider</b></small>
                     </Col>
                     <Col xs={12} md={4} className="mb-3  d-flex align-items-center justify-content-center gap-4">
                         <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-instagram" viewBox="0 0 16 16">
