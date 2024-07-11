@@ -56,17 +56,17 @@ const NavBar = () => {
       setNavItems(navItems.map(navItem => navItem.id === item.id ? updatedItem : navItem));
     }
   };
- const location = useLocation();
- const  routeruthDenide =()=> {
-  
-  useEffect(() => {
-    if (location.pathname === '/') {
-     localStorage.clear()
-    }
-  }, [location]);
-  
- }
- routeruthDenide()
+  const location = useLocation();
+  const useRouteruthDenide = () => {
+
+    useEffect(() => {
+      if (location.pathname === '/') {
+        localStorage.clear()
+      }
+    }, [location.pathname]);
+
+  }
+  useRouteruthDenide()
 
   return (
     <div>
