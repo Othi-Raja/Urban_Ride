@@ -63,7 +63,7 @@ const NavBar = () => {
       if (location.pathname === '/') {
         localStorage.clear()
       }
-    }, [location.pathname]);
+    }, [location]);
 
   }
   useRouteruthDenide()
