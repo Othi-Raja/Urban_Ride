@@ -140,3 +140,6 @@ backdrop-filter: blur(9px);
   border-top-left-radius: 40px;
 }
  }
+ .hidden{
+  display: none;
+ }

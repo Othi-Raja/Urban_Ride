@@ -5,6 +5,27 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   }
+  ,
+  "auth": {
+    "providers": {
+      "google": {
+        "enabled": true,
+        "clientId": "948394488608-a33k9jkn94rfr3njf5j5nlbrv4p88g4u.apps.googleusercontent.com",
+        "authorizedDomains": [
+          "othiraja64@gmail.com",
+          "info@urbanrider.in"
+        ]
+      }
+    }
+  }
 }
+
+
