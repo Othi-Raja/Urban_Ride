@@ -58,6 +58,7 @@ const Admin = () => {
           sucess()
           setAuthState(true);
           localStorage.setItem('Auth', true);
+          window.location.reload()
         } else {
           info();
           // Log out the user
