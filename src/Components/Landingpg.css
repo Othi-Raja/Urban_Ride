@@ -16,6 +16,9 @@
     z-index: 999; */
     margin: 0;
   }
+  .Border{
+    border: 1px solid red;
+  }
   .text-overlay {
     position: absolute;
     top: 60%;

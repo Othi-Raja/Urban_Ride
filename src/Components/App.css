@@ -108,7 +108,7 @@ backdrop-filter: blur(9px);
   height: auto;
 }
 .txt-justify{
-  text-align: justify;
+  /* text-align: justify; */
 }
 .logo{
   width: 100%;

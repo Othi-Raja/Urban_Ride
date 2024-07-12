@@ -23,7 +23,7 @@ const fetchNavItems = async () => {
 
 const updateNavItem = async (id, updatedItem) => {
   try {
-    const itemDoc = doc(firestoreDb, 'NavItem', id);
+    const itemDoc = doc(firestoreDb, 'HomePg', id);
     await updateDoc(itemDoc, updatedItem);
     console.log('Document updated with ID: ', id);
   } catch (e) {
@@ -32,7 +32,9 @@ const updateNavItem = async (id, updatedItem) => {
 };
 
 const isAuthenticated = () => {
+
   return localStorage.getItem('Auth') === 'true';
+
 };
 
 function LandingPG() {
@@ -91,10 +93,10 @@ function LandingPG() {
               <Route path="/Admin" element={<Admin />} />
             </Routes>
             <Container className="text-center text-overlay">
-              <p className='LP-text1' data-aos='fade-in' data-aos-delay='200' onClick={() => handleNavLinkClick(item, 'pageTxt1')}>
+              <p className='LP-text1 ' id='applyborder' data-aos='fade-in' data-aos-delay='200' onClick={() => handleNavLinkClick(item, 'pageTxt1')}>
                 {item.pageTxt1}
               </p>
-              <p className='LP-text2' data-aos='fade-in' data-aos-delay='300' onClick={() => handleNavLinkClick(item, 'pageTxt2')}>
+              <p className='LP-text2 ' id='applyborder' data-aos='fade-in' data-aos-delay='300' onClick={() => handleNavLinkClick(item, 'pageTxt2')}>
                 {item.pageTxt2}
               </p>
             </Container>
