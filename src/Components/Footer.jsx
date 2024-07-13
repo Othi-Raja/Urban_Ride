@@ -1,8 +1,9 @@
 import { React, useEffect, useState } from 'react'
-import { Container, Row, Col, Modal, Button } from 'react-bootstrap';
+import { Container, Row, Col, Modal } from 'react-bootstrap';
 import '../Components/App.css'
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import Switch from 'react-switch';
 import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { firestoreDb } from './firebaseConfig'; // Adjust the import path as necessary
 const fetchAboutContent = async () => {
@@ -42,14 +43,22 @@ export default function Footer() {
             // alert('You are not authorized to update the content.');
             return;
         }
-        // const newValue = prompt(`Update ${field}`, item[field]);
+        
         if (newValue && newValue !== item[field]) {
+            // Optimistic UI Update
             const updatedItem = { ...item, [field]: newValue };
-            await updateAboutItem(item.id, updatedItem);
-            // Update the local state
             setAboutItems(aboutItems.map(aboutItem => aboutItem.id === item.id ? updatedItem : aboutItem));
+            
+            try {
+                await updateAboutItem(item.id, updatedItem);
+            } catch (error) {
+                console.error("Failed to update the item:", error);
+                // Revert the UI update if the async operation fails
+                setAboutItems(aboutItems.map(aboutItem => aboutItem.id === item.id ? item : aboutItem));
+            }
         }
     };
+    
     useEffect(() => {
         AOS.init({
             duration: 1000, // Animation duration
@@ -86,11 +95,7 @@ export default function Footer() {
                                 </small>
                             </Col>
                             <Col xs={12} md={4} className="mb-3 d-flex align-items-center justify-content-center gap-4">
-                                {/* {item.instalogo.map((logo, index) => (
-    <a key={index} href={`#${logo}`} onClick={() => editAboutContent(item, logo)}>
-      <span dangerouslySetInnerHTML={{ __html: logo }} />
-    </a>
-  ))} */}
+                                {/* {item.instalogo.map((logo, index) => (<a key={index} href={`#${logo}`} onClick={() => editAboutContent(item, logo)}><span dangerouslySetInnerHTML={{ __html: logo }} /></a>))} */}
                                 <a className='showAuthIcon' href={item.socialmediaLink[0]} target='_blank' style={{ display: item.instagramLIveUnlive }}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" className="bi bi-instagram" viewBox="0 0 16 16">
                                     <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334" />
                                 </svg></a>
@@ -103,7 +108,7 @@ export default function Footer() {
                                 <a href={item.socialmediaLink[3]} target='_blank' style={{ display: item.tweeterLIveUnlive }}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" className="bi bi-twitter" viewBox="0 0 16 16">
                                     <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15" />
                                 </svg></a>
-                                <div className="editicon position-relative  " style={{ zIndex: '999', display: isAuth ? 'block' : 'none' }} onClick={() => handleShowModal(item)}><svg fill="#2fe970" className='blink pt-1' width="35px" height="35px" viewBox="-2 -2 24.00 24.00" xmlns="http://www.w3.org/2000/svg" stroke="#2fe970" transform="rotate(45)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M7.8 10a2.2 2.2 0 0 0 4.4 0 2.2 2.2 0 0 0-4.4 0z"></path></g></svg></div>
+                                <div className="editicon position-relative " style={{ zIndex: '999', display: isAuth ? 'block' : 'none' }} onClick={() => handleShowModal(item)}><svg fill="#2fe970" className='blink pt-1' width="35px" height="35px" viewBox="-2 -2 24.00 24.00" xmlns="http://www.w3.org/2000/svg" stroke="#2fe970" transform="rotate(45)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M7.8 10a2.2 2.2 0 0 0 4.4 0 2.2 2.2 0 0 0-4.4 0z"></path></g></svg></div>
                             </Col>
                             <Col xs={12} md={4}>
                                 <small><b>Terms & Privacy Policy</b></small>
@@ -116,34 +121,64 @@ export default function Footer() {
                                 <Modal.Body >
                                     {currentItem && (
                                         <>
-                                            <p><strong>Instagram:</strong> {item.instagramLIveUnlive == 'block' ? '🟢' : '🔴'} </p>
-                                            <Button className='mx-2 bg-success border-0' onClick={() => editAboutContent(item, 'instagramLIveUnlive', 'block')}>
-                                                live
-                                            </Button>
-                                            <Button className='mx-2 ' onClick={() => editAboutContent(item, 'instagramLIveUnlive', 'none')}>
-                                                Unlive
-                                            </Button>
-                                            <p><strong>Facebook:</strong>  {item.FacebookLIveUnlive == 'block' ? '🟢' : '🔴'}</p>
-                                            <Button className='mx-2 bg-success border-0' onClick={() => editAboutContent(item, 'FacebookLIveUnlive', 'block')}>
-                                                live
-                                            </Button>
-                                            <Button className='mx-2' onClick={() => editAboutContent(item, 'FacebookLIveUnlive', 'none')}>
-                                                Unlive
-                                            </Button>
-                                            <p><strong>Linkedin</strong>{item.LinkedinLIveUnlive == 'block' ? '🟢' : '🔴'}</p>
-                                            <Button className='mx-2 bg-success border-0' onClick={() => editAboutContent(item, 'LinkedinLIveUnlive', 'block')}>
-                                                live
-                                            </Button>
-                                            <Button className='mx-2' onClick={() => editAboutContent(item, 'LinkedinLIveUnlive', 'none')}>
-                                                Unlive
-                                            </Button>
-                                            <p><strong>Twitter</strong> {item.tweeterLIveUnlive == 'block' ? '🟢' : '🔴'}</p>
-                                            <Button className='mx-2 bg-success border-0' onClick={() => editAboutContent(item, 'tweeterLIveUnlive', 'block')}>
-                                                live
-                                            </Button>
-                                            <Button className='mx-2' onClick={() => editAboutContent(item, 'tweeterLIveUnlive', 'none')}>
-                                                Unlive
-                                            </Button>
+                                            <div className='d-flex justify-content-evenly'>
+                                                <p><strong>Instagram:</strong> </p>
+                                                {/* <span>{item.instagramLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
+                                                <Switch 
+                                                    onChange={(checked) => editAboutContent(item, 'instagramLIveUnlive', checked ? 'block' : 'none')}
+                                                    checked={item.instagramLIveUnlive == 'block'}
+                                                    onColor="#183153"
+                                                    offColor="#183153"
+                                                    handleDiameter={20}
+                                                    onHandleColor='#00d26a'
+                                                    offHandleColor='#f8312f'
+                                                />
+                                            </div>
+
+                                            <div className='d-flex justify-content-evenly'>
+                                                <p><strong>Facebook:</strong> </p>
+                                                {/* <span>{item.FacebookLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
+                                                <Switch
+                                                    onChange={(checked) => editAboutContent(item, 'FacebookLIveUnlive', checked ? 'block' : 'none')}
+                                                    checked={item.FacebookLIveUnlive == 'block'}
+                                                    onColor="#183153"
+                                                    offColor="#183153"
+                                                    handleDiameter={20}
+                                                    onHandleColor='#00d26a'
+                                                     offHandleColor='#f8312f'
+                                                />
+                                            </div>
+
+                                            <div className='d-flex justify-content-evenly'>
+                                                <p><strong>LinkedIn:</strong> </p>
+                                                {/* <span>{item.LinkedinLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
+                                                <Switch
+                                                    onChange={(checked) => editAboutContent(item, 'LinkedinLIveUnlive', checked ? 'block' : 'none')}
+                                                    checked={item.LinkedinLIveUnlive == 'block'}
+                                                    onColor="#183153"
+                                                    offColor="#183153"
+                                                    handleDiameter={20}
+                                                    onHandleColor='#00d26a'
+                                                    offHandleColor='#f8312f'
+                                                />
+                                            </div>
+                                            <div className='d-flex justify-content-evenly'>
+
+                                                <p><strong>Twitter:</strong></p>
+                                                {/* <span>{item.tweeterLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
+                                                <Switch
+                                                    onChange={(checked) => editAboutContent(item, 'tweeterLIveUnlive', checked ? 'block' : 'none')}
+                                                    checked={item.tweeterLIveUnlive == 'block'}
+                                                    onColor="#183153"
+                                                    offColor="#183153"
+                                                    handleDiameter={20}
+                                                    onHandleColor='#00d26a'
+                                                    offHandleColor='#f8312f'
+                                                     
+                                                   
+                                                 
+                                                />
+                                            </div>
                                         </>
                                     )}
                                 </Modal.Body>

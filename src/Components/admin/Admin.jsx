@@ -18,7 +18,7 @@ const info = () => {
     style: {
       color: 'orange',
       fontWeight: 'bold',
-      borderRadius:'30px'
+      borderRadius:'20px'
     }
   });
 }
@@ -36,7 +36,7 @@ const sucess = () => {
       color: 'green',
       fontWeight: "bold",
       textAlign: "center",
-      borderRadius:'30px'
+      borderRadius:'20px'
     }
   });
 }
