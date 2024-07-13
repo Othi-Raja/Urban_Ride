@@ -8,7 +8,6 @@ import Admin from './admin/Admin'
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { collection, getDocs, firestoreDb } from './firebaseConfig'; // Adjust the import path as necessary
 import { doc, updateDoc } from 'firebase/firestore'; // Import updateDoc
-// import { reload } from 'firebase/auth';
 
 const fetchNavItems = async () => {
   try {
@@ -79,13 +78,6 @@ function LandingPG() {
       if (location.pathname === '/admin') {
         window.open('/Admin', '_blank');
       }
-      if (location.pathname === '/') {
-        if (!sessionStorage.getItem('reloaded')) {
-          sessionStorage.setItem('reloaded', 'true');
-          window.location.reload();
-        }
-      }
-      
     } catch (error) {
       console.error('Error opening admin page:', error);
     }

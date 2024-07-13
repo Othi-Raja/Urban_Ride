@@ -21,7 +21,7 @@ const updateAboutItem = async (id, updatedItem) => {
     try {
         const itemDoc = doc(firestoreDb, 'FooterItems', id); // Corrected the collection name to 'About'
         await updateDoc(itemDoc, updatedItem);
-        console.log('Document updated with ID: ', id);
+        // console.log('Document updated with ID: ', id);
     } catch (e) {
         console.error('Error updating document: ', e);
     }
@@ -126,7 +126,7 @@ export default function Footer() {
                                                 {/* <span>{item.instagramLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
                                                 <Switch 
                                                     onChange={(checked) => editAboutContent(item, 'instagramLIveUnlive', checked ? 'block' : 'none')}
-                                                    checked={item.instagramLIveUnlive == 'block'}
+                                                    checked={item.instagramLIveUnlive === 'block'}
                                                     onColor="#183153"
                                                     offColor="#183153"
                                                     handleDiameter={20}
@@ -140,7 +140,7 @@ export default function Footer() {
                                                 {/* <span>{item.FacebookLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
                                                 <Switch
                                                     onChange={(checked) => editAboutContent(item, 'FacebookLIveUnlive', checked ? 'block' : 'none')}
-                                                    checked={item.FacebookLIveUnlive == 'block'}
+                                                    checked={item.FacebookLIveUnlive === 'block'}
                                                     onColor="#183153"
                                                     offColor="#183153"
                                                     handleDiameter={20}
@@ -154,7 +154,7 @@ export default function Footer() {
                                                 {/* <span>{item.LinkedinLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
                                                 <Switch
                                                     onChange={(checked) => editAboutContent(item, 'LinkedinLIveUnlive', checked ? 'block' : 'none')}
-                                                    checked={item.LinkedinLIveUnlive == 'block'}
+                                                    checked={item.LinkedinLIveUnlive === 'block'}
                                                     onColor="#183153"
                                                     offColor="#183153"
                                                     handleDiameter={20}
@@ -168,7 +168,7 @@ export default function Footer() {
                                                 {/* <span>{item.tweeterLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
                                                 <Switch
                                                     onChange={(checked) => editAboutContent(item, 'tweeterLIveUnlive', checked ? 'block' : 'none')}
-                                                    checked={item.tweeterLIveUnlive == 'block'}
+                                                    checked={item.tweeterLIveUnlive === 'block'}
                                                     onColor="#183153"
                                                     offColor="#183153"
                                                     handleDiameter={20}

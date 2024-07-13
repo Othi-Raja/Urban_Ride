@@ -53,7 +53,7 @@ const Admin = () => {
       .then((result) => {
         // Successfully signed in
         const user = result.user;
-        console.log(result);
+        // console.log(result);
         if (user.email === 'othiraja64@gmail.com') {
           sucess()
           setAuthState(true);
