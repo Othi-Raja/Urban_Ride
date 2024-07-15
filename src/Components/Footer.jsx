@@ -58,6 +58,27 @@ export default function Footer() {
             }
         }
     };
+    const editcopyRContent = async (item, field) => {
+        if (!isAuthenticated()) {
+            // alert('You are not authorized to update the content.');
+            return;
+        }
+        
+        const newValue = prompt(`Update ${field}`, item[field]);
+        if (newValue && newValue !== item[field]) {
+            // Optimistic UI Update
+            const updatedItem = { ...item, [field]: newValue };
+            setAboutItems(aboutItems.map(aboutItem => aboutItem.id === item.id ? updatedItem : aboutItem));
+            
+            try {
+                await updateAboutItem(item.id, updatedItem);
+            } catch (error) {
+                console.error("Failed to update the item:", error);
+                // Revert the UI update if the async operation fails
+                setAboutItems(aboutItems.map(aboutItem => aboutItem.id === item.id ? item : aboutItem));
+            }
+        }
+    };
     
     useEffect(() => {
         AOS.init({
@@ -90,7 +111,7 @@ export default function Footer() {
                     aboutItems.map((item, index) => (
                         <Row className='justify-content-center text-center' key={index}>
                             <Col xs={12} md={4} className="mb-3 mb-md-0">
-                                <small onClick={() => editAboutContent(item, 'Copuright')}>
+                                <small onClick={() => editcopyRContent(item, 'Copuright')}>
                                     <b>{date} &copy; {item.Copuright} </b>
                                 </small>
                             </Col>
@@ -111,7 +132,7 @@ export default function Footer() {
                                 <div className="editicon position-relative " style={{ zIndex: '999', display: isAuth ? 'block' : 'none' }} onClick={() => handleShowModal(item)}><svg fill="#2fe970" className='blink pt-1' width="35px" height="35px" viewBox="-2 -2 24.00 24.00" xmlns="http://www.w3.org/2000/svg" stroke="#2fe970" transform="rotate(45)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M7.8 10a2.2 2.2 0 0 0 4.4 0 2.2 2.2 0 0 0-4.4 0z"></path></g></svg></div>
                             </Col>
                             <Col xs={12} md={4}>
-                                <small><b>Terms & Privacy Policy</b></small>
+                                <small onClick={()=>editcopyRContent(item,'PvtPolicy')}><b>{item.PvtPolicy}</b></small>
                             </Col>
                             {/* Modal for Live/Unlive Options */}
                             <Modal Modal show={modalShow} onHide={handleCloseModal} >

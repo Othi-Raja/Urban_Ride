@@ -54,7 +54,7 @@ const Admin = () => {
         // Successfully signed in
         const user = result.user;
         // console.log(result);
-        if (user.email === 'othiraja64@gmail.com') {
+        if (user.email === 'othiraja64@gmail.com'|| user.email === 'info@urbanrider.in') {
           sucess()
           setAuthState(true);
           localStorage.setItem('Auth', true);
