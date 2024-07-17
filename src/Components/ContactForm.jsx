@@ -7,7 +7,6 @@ import app from '../Components/firebaseConfig';
 import { getDatabase, ref, set, push } from 'firebase/database';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 const field_alert = () => {
   toast.info("Fill all fields", {
     position: "top-center",
@@ -30,7 +29,6 @@ const field_alert = () => {
     },
   });
 };
-
 const notify_error = () => {
   toast.error("Oops! Something went wrong", {
     position: "top-center",
@@ -51,7 +49,6 @@ const notify_error = () => {
     },
   });
 };
-
 const notify_success = () => {
   toast.success("Submitted Successfully", {
     position: "top-center",
@@ -72,43 +69,35 @@ const notify_success = () => {
     },
   });
 };
-
 const ContactForm = () => {
   const [fullName, setFullName] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [email, setEmail] = useState('');
   const [details, setDetails] = useState('');
-
   useEffect(() => {
     // Initialize AOS
     AOS.init({
       duration: 1000, // Animation duration
     });
   }, []);
-
   const handleMobileNumberChange = (e) => {
     const value = e.target.value;
     const specialCharRegex = /[^0-9]/;
-
     if (specialCharRegex.test(value)) {
       toast.error('Mobile number should not contain special characters!');
     } else {
       setMobileNumber(value);
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!fullName || !email || !details || !mobileNumber) {
       field_alert();
       return;
     }
-
     const db = getDatabase(app);
     const refname = fullName;
     const newProductRef = push(ref(db, refname));
-
     try {
       await set(newProductRef, {
         time: new Date().toLocaleString(),
@@ -118,7 +107,6 @@ const ContactForm = () => {
         Umessage: details,
       });
       notify_success();
-      // Clear the form fields
       setFullName('');
       setEmail('');
       setMobileNumber('');
@@ -128,7 +116,6 @@ const ContactForm = () => {
       notify_error();
     }
   };
-
   return (
     <div className="contact-form" id='contact'>
       <Container className="p-4" style={{ backgroundColor: '#282828', borderRadius: '10px' }}>
@@ -139,7 +126,7 @@ const ContactForm = () => {
               <Form.Group controlId="formFullName">
                 {/* <Form.Label className="text-white">Full Name</Form.Label> */}
                 <Form.Control
-                className='p-2 mb-2'
+                  className='p-2 mb-2'
                   type="text"
                   placeholder="Full Name"
                   value={fullName}
@@ -177,7 +164,7 @@ const ContactForm = () => {
           </Row>
           <Form.Group controlId="formDetails" className="mb-3">
             {/* <Form.Label className="text-white">Details</Form.Label> */}
-            <Form.Control className='p-4 ' 
+            <Form.Control className='p-4 '
               as="textarea"
               rows={3}
               placeholder="Details"
@@ -195,5 +182,4 @@ const ContactForm = () => {
     </div>
   );
 };
-
 export default ContactForm;

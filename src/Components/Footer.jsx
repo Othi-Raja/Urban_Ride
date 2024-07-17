@@ -6,6 +6,8 @@ import 'aos/dist/aos.css';
 import Switch from 'react-switch';
 import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { firestoreDb } from './firebaseConfig'; // Adjust the import path as necessary
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
 const fetchAboutContent = async () => {
     try {
         const navCollection = collection(firestoreDb, 'FooterItems'); // Reference to the Firestore collection
@@ -43,12 +45,10 @@ export default function Footer() {
             // alert('You are not authorized to update the content.');
             return;
         }
-        
         if (newValue && newValue !== item[field]) {
             // Optimistic UI Update
             const updatedItem = { ...item, [field]: newValue };
             setAboutItems(aboutItems.map(aboutItem => aboutItem.id === item.id ? updatedItem : aboutItem));
-            
             try {
                 await updateAboutItem(item.id, updatedItem);
             } catch (error) {
@@ -63,13 +63,11 @@ export default function Footer() {
             // alert('You are not authorized to update the content.');
             return;
         }
-        
         const newValue = prompt(`Update ${field}`, item[field]);
         if (newValue && newValue !== item[field]) {
             // Optimistic UI Update
             const updatedItem = { ...item, [field]: newValue };
             setAboutItems(aboutItems.map(aboutItem => aboutItem.id === item.id ? updatedItem : aboutItem));
-            
             try {
                 await updateAboutItem(item.id, updatedItem);
             } catch (error) {
@@ -79,7 +77,6 @@ export default function Footer() {
             }
         }
     };
-    
     useEffect(() => {
         AOS.init({
             duration: 1000, // Animation duration
@@ -96,6 +93,50 @@ export default function Footer() {
     };
     const date = new Date().getFullYear();
     const isAuth = localStorage.getItem('Auth') === 'true';
+    const handleInputChange = (field, index, value) => {
+        setCurrentItem(prevItem => ({
+            ...prevItem,
+            [field]: prevItem[field] ? [
+                ...prevItem[field].slice(0, index),
+                value,
+                ...prevItem[field].slice(index + 1)
+            ] : prevItem[field]
+        }));
+    };
+    const handleInputChangecopyright = (field, value) => {
+        setCurrentItem(prevItem => ({
+            ...prevItem,
+            Copuright: {
+                ...prevItem.Copuright,
+                [field]: value
+            }
+        }));
+    };
+    const handleInputChangepvt = (field, value) => {
+        setCurrentItem(prevItem => ({
+            ...prevItem,
+            PvtPolicy: {
+                ...prevItem.PvtPolicy,
+                [field]: value
+            }
+        }));
+    };
+const handleSaveChanges = async () => {
+    if (!currentItem) return; // Ensure currentItem is defined
+    try {
+        // Validate fields before update
+        if (!currentItem.Copuright) {
+            console.error('Invalid data format for update: Copuright is missing');
+            return;
+        }
+        // Fields can be empty, so no need to check for CRText or CRUrl presence
+        await updateAboutItem(currentItem.id, currentItem); // Implement updateAboutItem to save changes in Firestore
+        handleCloseModal();
+    } catch (error) {
+        console.error('Failed to save changes:', error);
+        // Optionally handle error or display message to user
+    }
+};
     return (
         <div className='Footer' >
             <Container className='text-center pb-4'>
@@ -110,9 +151,11 @@ export default function Footer() {
                 {aboutItems.length > 0 ? (
                     aboutItems.map((item, index) => (
                         <Row className='justify-content-center text-center' key={index}>
-                            <Col xs={12} md={4} className="mb-3 mb-md-0">
-                                <small onClick={() => editcopyRContent(item, 'Copuright')}>
-                                    <b>{date} &copy; {item.Copuright} </b>
+                            <Col xs={12} md={4} className="mb-3 mb-md-0" style={{display:item.Copuright.CRText ===" "? "none": "block" }}>
+                                <small onClick={() => editcopyRContent(item, 'Copuright')} >
+                                    <a href={item.Copuright.CRUrl}  className='F-disable-link-style'>
+                                        <b>{date} &copy; {item.Copuright.CRText} </b>
+                                    </a>
                                 </small>
                             </Col>
                             <Col xs={12} md={4} className="mb-3 d-flex align-items-center justify-content-center gap-4">
@@ -129,23 +172,36 @@ export default function Footer() {
                                 <a href={item.socialmediaLink[3]} target='_blank' rel="noopener noreferrer" style={{ display: item.tweeterLIveUnlive }}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" className="bi bi-twitter" viewBox="0 0 16 16">
                                     <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334q.002-.211-.006-.422A6.7 6.7 0 0 0 16 3.542a6.7 6.7 0 0 1-1.889.518 3.3 3.3 0 0 0 1.447-1.817 6.5 6.5 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.32 9.32 0 0 1-6.767-3.429 3.29 3.29 0 0 0 1.018 4.382A3.3 3.3 0 0 1 .64 6.575v.045a3.29 3.29 0 0 0 2.632 3.218 3.2 3.2 0 0 1-.865.115 3 3 0 0 1-.614-.057 3.28 3.28 0 0 0 3.067 2.277A6.6 6.6 0 0 1 .78 13.58a6 6 0 0 1-.78-.045A9.34 9.34 0 0 0 5.026 15" />
                                 </svg></a>
-                                <div className="editicon position-relative " style={{ zIndex: '999', display: isAuth ? 'block' : 'none' }} onClick={() => handleShowModal(item)}><svg fill="#2fe970" className='blink pt-1' width="35px" height="35px" viewBox="-2 -2 24.00 24.00" xmlns="http://www.w3.org/2000/svg" stroke="#2fe970" transform="rotate(45)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M7.8 10a2.2 2.2 0 0 0 4.4 0 2.2 2.2 0 0 0-4.4 0z"></path></g></svg></div>
+                                {
+                                    isAuth && (
+                                        <div className="editicon position-relative" style={{ zIndex: '999', display: isAuth ? 'block' : 'none' }} onClick={() => handleShowModal(item)}>
+                                            <svg fill="#2fe970" className='blink pt-1' width="35px" height="35px" viewBox="-2 -2 24.00 24.00" xmlns="http://www.w3.org/2000/svg" stroke="#2fe970" transform="rotate(45)">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier"><path d="M7.8 10a2.2 2.2 0 0 0 4.4 0 2.2 2.2 0 0 0-4.4 0z"></path></g>
+                                            </svg>
+                                        </div>
+                                    )
+                                }
                             </Col>
-                            <Col xs={12} md={4}>
-                                <small onClick={()=>editcopyRContent(item,'PvtPolicy')}><b>{item.PvtPolicy}</b></small>
+                            <Col xs={12} md={4} style={{display:item.PvtPolicy.PvtText === " "? "none": "block" }}>
+                                <a href={item.PvtPolicy.PvtUrl} className='F-disable-link-style'>
+                                    <small onClick={() => editcopyRContent(item, 'PvtPolicy')}><b>{item.PvtPolicy.PvtText}</b></small>
+                                </a>
                             </Col>
                             {/* Modal for Live/Unlive Options */}
-                            <Modal Modal show={modalShow} onHide={handleCloseModal} >
+                            <Modal show={modalShow} onHide={handleCloseModal}>
                                 <Modal.Header closeButton>
-                                    <Modal.Title></Modal.Title>
+                                    <Modal.Title>Edit Social Media Links</Modal.Title>
                                 </Modal.Header>
-                                <Modal.Body >
+                                <Modal.Body>
                                     {currentItem && (
-                                        <>
-                                            <div className='d-flex justify-content-evenly'>
-                                                <p><strong>Instagram:</strong> </p>
-                                                {/* <span>{item.instagramLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
-                                                <Switch 
+                                        <> 
+                                            <div className='mb-3'>
+                                                <label htmlFor='instagramLink' className='form-label'>Instagram  <span>{<FontAwesomeIcon color='grey'  width={17} icon={faLink}/>}</span></label>
+                                                <input type='text' className='form-control ' id='instagramLink' value={currentItem.socialmediaLink[0]} onChange={(e) => handleInputChange('socialmediaLink', 0, e.target.value)} />
+                                                <div className='d-flex float-end pt-2'>
+                                                <Switch
                                                     onChange={(checked) => editAboutContent(item, 'instagramLIveUnlive', checked ? 'block' : 'none')}
                                                     checked={item.instagramLIveUnlive === 'block'}
                                                     onColor="#183153"
@@ -154,11 +210,12 @@ export default function Footer() {
                                                     onHandleColor='#00d26a'
                                                     offHandleColor='#f8312f'
                                                 />
+                                                </div>
                                             </div>
-
-                                            <div className='d-flex justify-content-evenly'>
-                                                <p><strong>Facebook:</strong> </p>
-                                                {/* <span>{item.FacebookLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
+                                            <div className='mb-3'>
+                                                <label htmlFor='facebookLink' className='form-label'>Facebook  <span>{<FontAwesomeIcon color='grey'  width={17} icon={faLink}/>}</span></label>
+                                                <input type='text' className='form-control' id='facebookLink' value={currentItem.socialmediaLink[1]} onChange={(e) => handleInputChange('socialmediaLink', 1, e.target.value)} />
+                                                <div className='d-flex float-end pt-2'>
                                                 <Switch
                                                     onChange={(checked) => editAboutContent(item, 'FacebookLIveUnlive', checked ? 'block' : 'none')}
                                                     checked={item.FacebookLIveUnlive === 'block'}
@@ -166,13 +223,14 @@ export default function Footer() {
                                                     offColor="#183153"
                                                     handleDiameter={20}
                                                     onHandleColor='#00d26a'
-                                                     offHandleColor='#f8312f'
+                                                    offHandleColor='#f8312f'
                                                 />
+                                                </div>
                                             </div>
-
-                                            <div className='d-flex justify-content-evenly'>
-                                                <p><strong>LinkedIn:</strong> </p>
-                                                {/* <span>{item.LinkedinLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
+                                            <div className='mb-3'>
+                                                <label htmlFor='linkedinLink' className='form-label'>LinkedIn  <span>{<FontAwesomeIcon color='grey'  width={17} icon={faLink}/>}</span></label>
+                                                <input type='text' className='form-control' id='linkedinLink' value={currentItem.socialmediaLink[2]} onChange={(e) => handleInputChange('socialmediaLink', 2, e.target.value)} />
+                                                <div className='d-flex float-end pt-2'>
                                                 <Switch
                                                     onChange={(checked) => editAboutContent(item, 'LinkedinLIveUnlive', checked ? 'block' : 'none')}
                                                     checked={item.LinkedinLIveUnlive === 'block'}
@@ -182,11 +240,12 @@ export default function Footer() {
                                                     onHandleColor='#00d26a'
                                                     offHandleColor='#f8312f'
                                                 />
+                                                </div>
                                             </div>
-                                            <div className='d-flex justify-content-evenly'>
-
-                                                <p><strong>Twitter:</strong></p>
-                                                {/* <span>{item.tweeterLIveUnlive == 'block' ? '🟢' : '🔴'}</span> */}
+                                            <div className='mb-3'>
+                                                <label htmlFor='twitterLink' className='form-label'>Twitter  <span>{<FontAwesomeIcon color='grey'  width={17} icon={faLink}/>}</span></label>
+                                                <input type='text' className='form-control' id='twitterLink' value={currentItem.socialmediaLink[3]} onChange={(e) => handleInputChange('socialmediaLink', 3, e.target.value)} />
+                                                <div className='d-flex float-end pt-2'>
                                                 <Switch
                                                     onChange={(checked) => editAboutContent(item, 'tweeterLIveUnlive', checked ? 'block' : 'none')}
                                                     checked={item.tweeterLIveUnlive === 'block'}
@@ -195,14 +254,48 @@ export default function Footer() {
                                                     handleDiameter={20}
                                                     onHandleColor='#00d26a'
                                                     offHandleColor='#f8312f'
-                                                     
-                                                   
-                                                 
                                                 />
+                                                </div>
                                             </div>
+                                            <span  className='model-content-title'>CopyRight </span>
+                                            <input
+                                                type="text"
+                                                className="form-control mb-3"
+                                                value={currentItem.Copuright.CRText}
+                                                onChange={(e) => handleInputChangecopyright('CRText', e.target.value)}
+                                            />
+                                            <span>Url <span>{<FontAwesomeIcon color='grey'  width={17} icon={faLink}/>}</span></span>
+                                            <input
+                                                type="text"
+                                                className="form-control mb-3"
+                                                value={currentItem.Copuright.CRUrl}
+                                                onChange={(e) => handleInputChangecopyright('CRUrl', e.target.value)}
+                                            />
+                                              <span className='model-content-title'>Term&condition</span>
+                                            <input
+                                                type="text"
+                                                className="form-control mb-3"
+                                                value={currentItem.PvtPolicy.PvtText}
+                                                onChange={(e) => handleInputChangepvt('PvtText', e.target.value)}
+                                            />
+                                           <span className='model-content-title'>Url <span>{<FontAwesomeIcon width={17} color='grey' icon={faLink}/>}</span></span>
+                                            <input
+                                                type="text"
+                                                className="form-control mb-3"
+                                                value={currentItem.PvtPolicy.PvtUrl}
+                                                onChange={(e) => handleInputChangepvt('PvtUrl', e.target.value)}
+                                            />
                                         </>
                                     )}
                                 </Modal.Body>
+                                <Modal.Footer>
+                                    <button className="btn btn-secondary" onClick={handleCloseModal}>
+                                        Cancel
+                                    </button>
+                                    <button className="btn btn-primary" onClick={handleSaveChanges}>
+                                        Save
+                                    </button>
+                                </Modal.Footer>
                             </Modal>
                         </Row>
                     ))

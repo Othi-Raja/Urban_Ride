@@ -44,7 +44,7 @@ const Admin = () => {
   const [authState, setAuthState] = useState(false);
   useEffect(() => {
     const auth = localStorage.getItem('Auth');
-    if (auth) {
+    if (auth === 'true') {
       setAuthState(true);
     }
   }, []);
@@ -62,7 +62,6 @@ const Admin = () => {
         } else {
           info();
           // Log out the user
-          localStorage.clear();
           auth.signOut();
           // alert('Unauthorized email');
         }

@@ -4,7 +4,7 @@
     height: 100vh;
  }
 .background-image {
-    background-image: url('../images/Groupulfinal.png');  
+    /* background-image: url('../images/Groupulfinal.png');   */
     background-size: cover;
     background-position: center;
     height: 100vh; /* Adjust the height as needed */
