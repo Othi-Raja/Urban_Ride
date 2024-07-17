@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Container, Row, Col, Modal, Button, Form } from 'react-bootstrap';
 import '../Components/App.css';
-import riderImg from '../images/riderImg.png';
+// import riderImg from '../images/riderImg.png';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import 'react-quill/dist/quill.snow.css';
