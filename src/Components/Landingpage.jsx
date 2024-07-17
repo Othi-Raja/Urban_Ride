@@ -10,10 +10,10 @@ import { collection, getDocs, firestoreDb } from './firebaseConfig';
 import { doc, updateDoc } from 'firebase/firestore';
 const fetchNavItems = async () => {
   try {
-    const LCollection = collection(firestoreDb, 'HomePg');
-    const LSnapshot = await getDocs(LCollection);
-    const LList = LSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    return LList;
+    const navCollection = collection(firestoreDb, 'HomePg');
+    const navSnapshot = await getDocs(navCollection);
+    const navList = navSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return navList;
   } catch (error) {
     console.error("Error fetching nav items:", error);
     return [];
@@ -32,7 +32,7 @@ const isAuthenticated = () => {
   return localStorage.getItem('Auth') === 'true';
 };
 function LandingPG() {
-  const [LandingItems, setLandingItems] = useState([]);
+  const [navItems, setNavItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentItem, setCurrentItem] = useState(null);
   const [pageTxt1, setPageTxt1] = useState('');
@@ -42,7 +42,7 @@ function LandingPG() {
   useEffect(() => {
     const getNavItems = async () => {
       const items = await fetchNavItems();
-      setLandingItems(items);
+      setNavItems(items);
     };
     getNavItems();
   }, []);
@@ -85,7 +85,7 @@ function LandingPG() {
     if (currentItem) {
       const updatedItem = { ...currentItem, pageTxt1, pageTxt2 };
       await updateNavItem(currentItem.id, updatedItem);
-      setLandingItems(navItems.map(navItem => navItem.id === currentItem.id ? updatedItem : navItem));
+      setNavItems(navItems.map(navItem => navItem.id === currentItem.id ? updatedItem : navItem));
       if (newBgImageUrl) {
         try {
           const bgCollection = collection(firestoreDb, 'HomePg');
@@ -122,7 +122,7 @@ function LandingPG() {
   let bgimagehere = backgroundImage;
   return (
     <div>
-      {LandingItems.map((item, index) => (
+      {navItems.map((item, index) => (
         <div key={index} className='landing-pg bg-black'>
           <div className="background-image" style={{ background: `url(${bgimagehere})` }}>
             <Navbar />
