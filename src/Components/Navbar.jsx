@@ -4,8 +4,14 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../Components/App.css';
 import { useLocation } from 'react-router-dom';
+import { auth } from './firebaseConfig';
+import {  signOut } from 'firebase/auth';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { collection, getDocs, firestoreDb } from './firebaseConfig'; // Adjust the import path as necessary
 import { doc, updateDoc } from 'firebase/firestore'; // Import updateDoc
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 const fetchNavItems = async () => {
   try {
     const navCollection = collection(firestoreDb, 'NavItem');  
@@ -21,7 +27,7 @@ const updateNavItem = async (id, updatedItem) => {
   try {
     const itemDoc = doc(firestoreDb, 'NavItem', id);
     await updateDoc(itemDoc, updatedItem);
-    console.log('Document updated with ID: ', id);
+    // console.log('Document updated with ID: ', id);
   } catch (e) {
     console.error('Error updating document: ', e);
   }
@@ -69,7 +75,48 @@ const NavBar = () => {
       }
     });
   }
+
   useRouteruthDenide();
+  // const [authState, setAuthState] = useState(false);
+  const signOutSuccess = () => {
+    toast.success('Logged out successfully', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      style: {
+        color: 'green',
+        fontWeight: "bold",
+        textAlign: "center",
+        borderRadius: '20px'
+      }
+    });
+  };
+  
+  function handleSignOut() {
+    signOut(auth)
+      .then(() => {
+        localStorage.removeItem('Auth');
+        // setAuthState(false);
+        signOutSuccess();
+        window.location.assign('/admin'); 
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error('Error signing out: ', error);
+      });
+  }
+  // if (authState) {
+  //   const card = document.querySelector('.card');
+  //   if (card) {
+  //     card.classList.add('hidden');
+  //   }
+  // }
+  
   return (
     <div>
       <Navbar className='Nav-bg fixed-top bg-glass' variant="dark" expand="lg" expanded={expanded} onToggle={() => setExpanded(!expanded)}>
@@ -114,6 +161,11 @@ const NavBar = () => {
                   >
                     {item.navItem4}
                   </Nav.Link>
+                 {
+                  localStorage.getItem('Auth') === 'true' &&(
+                    <span onClick={handleSignOut} className='px-2 pt-2'><FontAwesomeIcon icon={faRightFromBracket}/></span>
+                  )
+                 }
                 </Nav>
               </Navbar.Collapse> 
             </Container>

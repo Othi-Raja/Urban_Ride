@@ -137,8 +137,8 @@ const About = () => {
   return (
     <div>
       {aboutItems.map((item, index) => (
-        <div key={index} className="top-faded pt-5" id='about'>
-          <div className="about-Pg">
+        <div key={index} className="top-faded " id='about'>
+          <div className="about-Pg pt-4">
             <Container>
               <Row className="text-center pt-5">
                 <h2 data-aos="fade-in" className="pb-4 mb-4" onClick={() => editAboutContent(item, 'AbTitle')}>

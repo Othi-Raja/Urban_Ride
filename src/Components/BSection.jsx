@@ -73,7 +73,7 @@ const BSection = () => {
           </Row>
           <Row className="justify-content-center w-100 m-auto">
             {logos.map((logo, index) => (
-              <Col key={index} xs={12} sm={6} md={4} lg={3} className="d-flex justify-content-center align-items-center mb-3">
+              <Col key={index} xs={12} sm={6} md={4} lg={3} className="d-flex justify-content-center align-items-center mb-3" id='contact'>
                 <a href={logo.website} target="_blank" rel="noopener noreferrer" className="d-flex justify-content-center align-items-center">
                   <img
                     src={logo.logo}

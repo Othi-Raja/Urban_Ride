@@ -62,9 +62,16 @@ backdrop-filter: blur(9px);
 .about-Pg {
   background-color: var(--grey);
   color: var(--about-bg);
-  border-top-right-radius: 80px;
-  border-top-left-radius: 80px;
+  /* border-top-right-radius: 80px;
+  border-top-left-radius: 80px; */
   padding-bottom: 80px;
+}
+.glassbg{
+  /* From https://css.glass */
+background:transparent;
+
+backdrop-filter: blur(10.9px);
+-webkit-backdrop-filter: blur(10.9px);
 }
 .rider-img {
   clip-path: circle();

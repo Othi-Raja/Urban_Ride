@@ -5,6 +5,8 @@ import Navbar from './Navbar';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Admin from './admin/Admin';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { collection, getDocs, firestoreDb } from './firebaseConfig';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -23,10 +25,28 @@ const updateNavItem = async (id, updatedItem) => {
   try {
     const itemDoc = doc(firestoreDb, 'HomePg', id);
     await updateDoc(itemDoc, updatedItem);
-    console.log('Document updated with ID: ', id);
+    // console.log('Document updated with ID: ', id);
   } catch (e) {
     console.error('Error updating document: ', e);
   }
+};
+const success = (inputtext) => {
+  toast.success( inputtext + '🎉', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    style: {
+      color: 'green',
+      fontWeight: "bold",
+      textAlign: "center",
+      borderRadius: '20px'
+    }
+  });
 };
 const isAuthenticated = () => {
   return localStorage.getItem('Auth') === 'true';
@@ -37,7 +57,7 @@ function LandingPG() {
   const [currentItem, setCurrentItem] = useState(null);
   const [pageTxt1, setPageTxt1] = useState('');
   const [pageTxt2, setPageTxt2] = useState('');
-  const [backgroundImage, setBackgroundImage] = useState('');
+  // const [backgroundImage, setBackgroundImage] = useState('');
   const [newBgImageUrl, setNewBgImageUrl] = useState('');
   useEffect(() => {
     const getNavItems = async () => {
@@ -52,8 +72,9 @@ function LandingPG() {
         const bgCollection = collection(firestoreDb, 'HomePg');
         const bgSnapshot = await getDocs(bgCollection);
         if (!bgSnapshot.empty) {
-          const bgData = bgSnapshot.docs[0].data();
-          setBackgroundImage(bgData.BgImg);
+          // const bgData = bgSnapshot.docs[0].data();
+          // setBackgroundImage(bgData.BgImg);
+          
         }
       } catch (error) {
         console.error("Error fetching background image:", error);
@@ -68,7 +89,7 @@ function LandingPG() {
     setCurrentItem(item);
     setPageTxt1(item.pageTxt1);
     setPageTxt2(item.pageTxt2);
-    setBackgroundImage(item.BgImg);
+    // setBackgroundImage(item.BgImg);
     setShowModal(true);
   };
   const handleModalChange = (e) => {
@@ -93,8 +114,9 @@ function LandingPG() {
           if (!bgSnapshot.empty) {
             const bgDoc = bgSnapshot.docs[0].id;
             await updateDoc(doc(firestoreDb, 'HomePg', bgDoc), { BgImg: newBgImageUrl });
-            setBackgroundImage(newBgImageUrl);
-            console.log('Background image updated successfully.');
+            // setBackgroundImage(newBgImageUrl);
+            // console.log('Background image updated successfully.');
+            success('background image uploaded Refresh')
           }
         } catch (error) {
           console.error('Error updating background image:', error);
@@ -119,12 +141,13 @@ function LandingPG() {
     }
   }, [location]);
   let isAuth = isAuthenticated();
-  let bgimagehere = backgroundImage;
+  // let bgimagehere = backgroundImage;
+  // console.log(bgimagehere);
   return (
-    <div>
+    <div id='home'>
       {navItems.map((item, index) => (
-        <div key={index} className='landing-pg bg-black'>
-          <div className="background-image" style={{ background: `url(${bgimagehere})` }}>
+        <div key={index} className='landing-pg bg-black '>
+          <div className="background-image" style={{ background: `url(${item.BgImg})`, backgroundPosition:'center', height:'100vh',backgroundSize:'cover' }}>
             <Navbar />
             <Routes>
               <Route path="/Admin" element={<Admin />} />

@@ -1,7 +1,8 @@
  .landing-pg{
-    background-color: black;
+    /* background-color: black; */
     width: 100%;
     height: 100vh;
+    z-index: -999;
  }
 .background-image {
     /* background-image: url('../images/Groupulfinal.png');   */
