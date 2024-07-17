@@ -7,10 +7,11 @@ import 'aos/dist/aos.css';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen} from '@fortawesome/free-solid-svg-icons';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 import ReactQuill from 'react-quill';
 import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { firestoreDb } from './firebaseConfig';
+
 const fetchAboutContent = async () => {
   try {
     const navCollection = collection(firestoreDb, 'About');
@@ -22,6 +23,7 @@ const fetchAboutContent = async () => {
     return [];
   }
 };
+
 const updateAboutItem = async (id, updatedItem) => {
   try {
     const itemDoc = doc(firestoreDb, 'About', id);
@@ -31,9 +33,11 @@ const updateAboutItem = async (id, updatedItem) => {
     console.error('Error updating document: ', e);
   }
 };
+
 const isAuthenticated = () => {
   return localStorage.getItem('Auth') === 'true';
 };
+
 const About = () => {
   const [aboutItems, setAboutItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -42,21 +46,24 @@ const About = () => {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const [newImageUrl, setNewImageUrl] = useState('');
-  const [currentImage, setCurrentImage] = useState(riderImg);
+
   const getAboutItems = useCallback(async () => {
     const items = await fetchAboutContent();
     setAboutItems(items);
   }, []);
+
   useEffect(() => {
     getAboutItems();
   }, [getAboutItems]);
+
   useEffect(() => {
     AOS.init({
       duration: 1000,
     });
   }, []);
+
   const editAboutContent = (item, field) => {
-    if (!isAuthenticated()) { 
+    if (!isAuthenticated()) {
       return;
     }
     setModalContent(item[field]);
@@ -64,6 +71,7 @@ const About = () => {
     setSelectedItemId(item.id);
     setShowModal(true);
   };
+
   const handleSaveContent = async () => {
     if (!modalField || !modalContent || !selectedItemId) {
       console.error('Error: Modal field, content, or selected item ID is empty.');
@@ -79,21 +87,22 @@ const About = () => {
     );
     setShowModal(false);
   };
+
   const handleUploadClick = () => {
     setShowImageModal(true);
   };
-  
+
   const handleSaveImageUrl = async () => {
     try {
-      const itemDoc = doc(firestoreDb, 'About', 'aboutCon'); // Replace 'YOUR_DOCUMENT_ID' with your actual document ID
+      const itemDoc = doc(firestoreDb, 'About', 'aboutCon'); // Replace 'aboutCon' with your actual document ID
       await updateDoc(itemDoc, { AboutProfileImage: newImageUrl });
       console.log('AboutProfileImage updated successfully.');
-      setCurrentImage(newImageUrl); // Update local state with new image URL
       setShowImageModal(false); // Close the modal after successful update
     } catch (error) {
       console.error('Error updating AboutProfileImage:', error);
     }
   };
+
   const modules = {
     toolbar: [
       [{ 'header': '1' }, { 'header': '2' }, { 'header': '3' }, { 'font': [] }],
@@ -108,6 +117,7 @@ const About = () => {
       matchVisual: false,
     }
   };
+
   const formats = [
     'header',
     'font',
@@ -121,7 +131,9 @@ const About = () => {
     'color',
     'background'
   ];
+
   const isAuth = isAuthenticated();
+
   return (
     <div>
       {aboutItems.map((item, index) => (
@@ -141,7 +153,7 @@ const About = () => {
                   />
                   {isAuth && (
                     <Button className='edit-Icon' size="sm" onClick={() => editAboutContent(item, 'AbPara1')}>
-                      <FontAwesomeIcon  icon={faPen}/>
+                      <FontAwesomeIcon icon={faPen} />
                     </Button>
                   )}
                 </Col>
@@ -223,4 +235,5 @@ const About = () => {
     </div>
   );
 };
+
 export default About;
